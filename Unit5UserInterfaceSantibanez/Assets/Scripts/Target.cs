@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class Target : MonoBehaviour
@@ -34,22 +35,40 @@ public class Target : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        GameOver();
     }
 
 
     private void OnMouseDown()
     {
+        if(gameManager.isGameActive)
+        {
         Destroy(gameObject);
         Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
         gameManager.UpdateScore(pointValue);
+        }
+        if(gameManager.isGameActive && gameObject.CompareTag("Bad"))
+        {
+            gameManager.lives--;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if(!gameObject.CompareTag("Bad"))
+        {
+            gameManager.lives--;
+            //gameManager.GameOver();
+        }
         Destroy(gameObject);
     }
-
+    private void GameOver()
+    {
+        if(gameManager.lives < 1)
+        {
+            gameManager.GameOver();
+        }
+    }
 
     Vector3 RandomForce()
     {
