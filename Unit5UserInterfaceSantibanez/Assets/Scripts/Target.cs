@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class Target : MonoBehaviour
 {
-    private float minSpeed = 12;
-    private float maxSpeed = 16;
+    private float minSpeed = 14;
+    private float maxSpeed = 18;
     private float maxTorque = 10;
     private float xRange = 4;
     private float ySpawnPos = -6;
@@ -41,23 +41,23 @@ public class Target : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if(gameManager.isGameActive)
+        if(gameManager.isGameActive && gameManager.gamePaused == false)
         {
         Destroy(gameObject);
         Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
         gameManager.UpdateScore(pointValue);
         }
-        if(gameManager.isGameActive && gameObject.CompareTag("Bad"))
+        if(gameManager.isGameActive && gameObject.CompareTag("Bad") && gameManager.gamePaused == false)
         {
-            gameManager.lives--;
+            gameManager.UpdateLives(-1);
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(!gameObject.CompareTag("Bad"))
+        if(!gameObject.CompareTag("Bad") && gameManager.lives >= 1)
         {
-            gameManager.lives--;
+            gameManager.UpdateLives(-1);
             //gameManager.GameOver();
         }
         Destroy(gameObject);
