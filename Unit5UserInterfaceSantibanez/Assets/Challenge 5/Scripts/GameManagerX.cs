@@ -19,7 +19,7 @@ public class GameManagerX : MonoBehaviour
     private int score;
     private float spawnRate = 1.5f;
     public bool isGameActive;
-    private int countdown = 60;
+    public float countdown = 60;
 
     private float spaceBetweenSquares = 2.5f; 
     private float minValueX = -3.75f; //  x value of the center of the left-most square
@@ -32,9 +32,23 @@ public class GameManagerX : MonoBehaviour
         isGameActive = true;
         StartCoroutine(SpawnTarget());
         score = 0;
+        countdown = 60;
         UpdateScore(0);
         titleScreen.SetActive(false);
         
+    }
+
+     void FixedUpdate()
+    {
+        if(isGameActive == true)
+        {
+            Countdown();
+        }
+
+        if(countdown <= 0)
+        {
+            GameOver();
+        }
     }
 
     // While game is active spawn a random target
@@ -92,6 +106,7 @@ public class GameManagerX : MonoBehaviour
     }
     public void Countdown()
     {
-
+            countdown -= Time.deltaTime;
+            timerText.text = "Timer: " + Mathf.Round(countdown);
     }
 }
